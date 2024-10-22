@@ -9,10 +9,21 @@ const KEY = process.env.REACT_APP_KEY;
 export default function App() {
   const [query, setQuery] = useState("");
   const [movies, setMovies] = useState([]);
-  const [watched, setWatched] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [selectedId, setSelectedId] = useState(null);
+
+  /* 
+    
+  // loading watched with inital data from localStorage
+  // function in the useState() needs to a pure function, which means no argument
+  // this will only be look at by React when component first mounts
+  */
+  // const [watched, setWatched] = useState([]);
+  const [watched, setWatched] = useState(() => {
+    const storeValue = localStorage.getItem("watched");
+    return JSON.parse(storeValue);
+  });
 
   const handleSelectMovie = (id) => {
     setSelectedId(id === selectedId ? null : id);
@@ -27,6 +38,12 @@ export default function App() {
   const handleDeleteWatched = (id) => {
     setWatched((watched) => watched.filter((movie) => movie.imdbID !== id));
   };
+
+  // Updating localStorage
+  // updates the localStorage when movie gets deleted too
+  useEffect(() => {
+    localStorage.setItem("watched", JSON.stringify(watched));
+  }, [watched]);
 
   // component composition to avoid prop drilling
   // useEffect() syncronize UI with the outside world
