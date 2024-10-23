@@ -18,6 +18,7 @@ const Search = ({ query, onSetQuery }) => {
     document.addEventListener("keydown", callBack);
     return () => document.removeEventListener("keydown", callBack);
   }, [onSetQuery]);
+
   return (
     <input
       className="search"

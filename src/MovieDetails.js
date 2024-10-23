@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import StarRating from "./StarRating";
 const KEY = process.env.REACT_APP_KEY;
 
@@ -7,6 +7,14 @@ const MovieDetails = ({ selectedId, onCloseMovie, onAddWatched, watched }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [userRating, setUserRating] = useState(0);
+
+  const countRef = useRef(0);
+  useEffect(() => {
+    if (userRating > 0) {
+      countRef.current += 1;
+    }
+  }, [userRating]);
+
   const {
     Title: title,
     Year: year,
@@ -36,6 +44,7 @@ const MovieDetails = ({ selectedId, onCloseMovie, onAddWatched, watched }) => {
       runtime: Number(runtime.split(" ").at(0)),
       imdbRating: Number(imdbRating),
       userRating,
+      countRatingDecisions: countRef.current,
     };
     onAddWatched(newMovie);
     onCloseMovie();
