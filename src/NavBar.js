@@ -1,10 +1,23 @@
-import { useState } from "react";
+import { useEffect, useRef } from "react";
 
 const NavBar = ({ children }) => {
   return <nav className="nav-bar">{children}</nav>;
 };
 
 const Search = ({ query, onSetQuery }) => {
+  const inputEl = useRef(null);
+
+  useEffect(() => {
+    const callBack = (e) => {
+      if (document.activeElement === inputEl.current) return;
+      if (e.code === "Enter") {
+        inputEl.current.focus();
+        onSetQuery("");
+      }
+    };
+    document.addEventListener("keydown", callBack);
+    return () => document.removeEventListener("keydown", callBack);
+  }, [onSetQuery]);
   return (
     <input
       className="search"
@@ -12,6 +25,7 @@ const Search = ({ query, onSetQuery }) => {
       placeholder="Search movies..."
       value={query}
       onChange={(e) => onSetQuery(e.target.value)}
+      ref={inputEl}
     />
   );
 };

@@ -13,12 +13,12 @@ export default function App() {
   const [error, setError] = useState("");
   const [selectedId, setSelectedId] = useState(null);
 
-  /* 
-    
-  // loading watched with inital data from localStorage
-  // function in the useState() needs to a pure function, which means no argument
-  // this will only be look at by React when component first mounts
+  /*  
+   loading watched with inital data from localStorage
+   function in the useState() needs to a pure function, which means no argument
+   this will only be look at by React when component first mounts
   */
+
   // const [watched, setWatched] = useState([]);
   const [watched, setWatched] = useState(() => {
     const storeValue = localStorage.getItem("watched");
@@ -39,8 +39,7 @@ export default function App() {
     setWatched((watched) => watched.filter((movie) => movie.imdbID !== id));
   };
 
-  // Updating localStorage
-  // updates the localStorage when movie gets deleted too
+  // Updating(add/delete) localStorage
   useEffect(() => {
     localStorage.setItem("watched", JSON.stringify(watched));
   }, [watched]);
