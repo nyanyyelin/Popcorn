@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import StarRating from "./StarRating";
+import { useKey } from "./useKey";
 const KEY = process.env.REACT_APP_KEY;
 
 const MovieDetails = ({ selectedId, onCloseMovie, onAddWatched, watched }) => {
@@ -78,18 +79,9 @@ const MovieDetails = ({ selectedId, onCloseMovie, onAddWatched, watched }) => {
     return () => (document.title = "usePopcorn");
   }, [title]);
 
-  // purposely put this here so that
+  // purposely put this custom hook here so that
   // event listener gets attached when this component mounts
-  useEffect(() => {
-    const callback = (e) => {
-      if (e.code === "Escape") {
-        onCloseMovie();
-      }
-    };
-    document.addEventListener("keydown", callback);
-    // clean up function
-    return () => document.removeEventListener("keydown", callback);
-  }, [onCloseMovie]);
+  useKey("Escape", onCloseMovie);
 
   if (isLoading) return <Loader />;
   if (error) return <ErrorMessage error={error} />;
